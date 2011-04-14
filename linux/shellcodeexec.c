@@ -62,8 +62,11 @@ int sys_bineval(char *argv)
 #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(WIN32)
 	// allocate a +rwx memory page
 	code = (char *) VirtualAlloc(NULL, len+1, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+
+	// copy over the shellcode
 	strncpy(code, argv, len);
 
+	// execute it by ASM code defined in exec_payload function
 	WaitForSingleObject(CreateThread(NULL, 0, exec_payload, code, 0, &pID), INFINITE);
 #else
 	pID = fork();
@@ -75,14 +78,16 @@ int sys_bineval(char *argv)
 		page_size = (size_t)sysconf(_SC_PAGESIZE)-1;	// get page size
 		page_size = (len+page_size) & ~(page_size);		// align to page boundary
 
-		// mmap an rwx memory page
+		// mmap an +rwx memory page
 		addr = mmap(0, page_size, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_SHARED|MAP_ANONYMOUS, 0, 0);
 
 		if (addr == MAP_FAILED)
 			return 1;
 
+		// copy over the shellcode
 		strncpy((char *)addr, argv, len);
 
+		// execute it
 		((void (*)(void))addr)();
 	}
 

