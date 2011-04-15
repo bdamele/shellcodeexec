@@ -1,4 +1,4 @@
-Before compiling, an enviroment variables has to be set.
+Before compiling, an enviroment variable has to be set.
 
 --------------------------------------------------------------------------
 Variable name			Variable description
@@ -6,7 +6,7 @@ Variable name			Variable description
 PLATFORM_SDK_DIR		Directory where the Platform SDK is installed
 
 
-Procedure for setting environment variables:
+Procedure for setting environment variables on Windows:
 My Computer -> Properties -> Advanced -> Environment Variables
 User variables -> New
 
