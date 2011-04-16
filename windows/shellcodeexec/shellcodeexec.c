@@ -39,6 +39,11 @@ int sys_bineval(char *argv);
 
 int main(int argc, char *argv[])
 {
+	if (argc < 2) {
+		printf("Run:\n\tshellcodeexec <alphanumeric-encoded shellcode>\n");
+		exit(-1);
+	}
+
 	sys_bineval(argv[1]);
 
 	exit(0);
