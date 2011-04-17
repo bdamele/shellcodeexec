@@ -81,10 +81,10 @@ int sys_bineval(char *argv)
 	if(pID==0)
 	{
 		page_size = (size_t)sysconf(_SC_PAGESIZE)-1;	// get page size
-		page_size = (len+page_size) & ~(page_size);		// align to page boundary
+		page_size = (len+page_size) & ~(page_size);	// align to page boundary
 
 		// mmap an +rwx memory page
-		addr = mmap(0, page_size, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_SHARED|MAP_ANONYMOUS, 0, 0);
+		addr = mmap(0, page_size, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_SHARED|MAP_ANON, 0, 0);
 
 		if (addr == MAP_FAILED)
 			return 1;
