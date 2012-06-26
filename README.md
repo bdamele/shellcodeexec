@@ -1,12 +1,10 @@
-# Short description
-
-shellcodeexec is a small script to execute in memory a sequence of opcodes.
-
 ## Background
 
 Most of the shellcode launchers out there, including proof of concepts part of many "security" books, detail how to allocate a memory page as readable/writable/executable on POSIX systems, copy over your shellcode and execute it. This works just fine. However, it is limited to POSIX, does not necessarily consider 64-bit architecture and Windows systems.
 
 ## Description
+
+shellcodeexec is an open source script to execute in memory a sequence of opcodes.
 
 This script and the relevant project files (Makefile and Visual Studio files) allow you to compile the tool once then run your shellcode across different architectures and operating systems.
 
