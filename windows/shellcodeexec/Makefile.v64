@@ -1,0 +1,8 @@
+shellcodeexecvc64.exe: shellcodeexec.obj __exec_payload.obj
+	link shellcodeexec.obj __exec_payload.obj
+
+shellcodeexec.obj: shellcodeexec.c
+	cl shellcodeexec.c /Os /TC /c
+
+__exec_payload.obj: __exec_payload.asm
+	ml64 __exec_payload.asm /c
